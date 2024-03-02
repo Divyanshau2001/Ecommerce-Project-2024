@@ -13,7 +13,7 @@ interface IUser extends Document {
     createdAt: Date;
     updatedAt: Date;
 
-    //Vistual Attribute
+    //Virtual Attribute
     age: number;
 }
 
@@ -62,11 +62,10 @@ const schema = new mongoose.Schema(
         const dob = this.dob;
         let age = today.getFullYear() - dob.getFullYear();
 
-        if(today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) age--;
+        if(today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())){ age--;}
 
         return age;
 
-    }
-    )
+    });
 
 export const User = mongoose.model<IUser>("User", schema)
