@@ -1,17 +1,20 @@
 import { User } from "../models/user.js";
+import ErrorHandler from "../utils/utility-class.js";
 export const newUser = async (req, res, next) => {
     try {
+        return next(new ErrorHandler("Custom Error handler", 5600));
+        // return next(new ErrorHandler("My custom Error", 402));
         const { name, email, photo, gender, _id, dob } = req.body;
         const user = await User.create({ name, email, photo, gender, _id, dob: new Date(dob) });
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             message: `Welcome , ${user.name}`,
         });
     }
     catch (error) {
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
-            message: error
+            message: error,
         });
     }
 };
