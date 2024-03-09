@@ -6,4 +6,6 @@ const app = express.Router();
 //route /api/v1/user/new
 app.post("/new", newUser);
 
+// app.get("/all", getDefaultAutoSelectFamily)
+
 export default app;
