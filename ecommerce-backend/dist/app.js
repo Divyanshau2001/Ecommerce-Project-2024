@@ -13,12 +13,6 @@ app.get("/", (req, res) => {
 //using routes
 app.use("/api/v1/user", userRoute);
 app.use(errorMiddleware);
-// app.use((err: Error, req: Request,res: Response,next: NextFunction) => {
-//     return res.status(400).json({
-//         success: true,
-//         message: "Some Error"
-//     });
-// });
 app.listen(port, () => {
     console.log(`Express is working on localhost http://localhost:${port}`);
 });
