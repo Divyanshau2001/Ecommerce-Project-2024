@@ -1,7 +1,10 @@
 import express from "express";
-import { newUser } from "../controllers/user.js";
+import { newUser, getAllUsers, getUser, deleteUser } from "../controllers/user.js";
 const app = express.Router();
 //route /api/v1/user/new
 app.post("/new", newUser);
-// app.get("/all", getDefaultAutoSelectFamily)
+// route  /api/v1/user/all
+app.get("/all", getAllUsers);
+// route  /api/v1/user/id
+app.route("/:id").get(getUser).delete(deleteUser);
 export default app;
