@@ -107,3 +107,39 @@ export const deleteProduct = TryCatch(async (req, res, next) => {
         message: "Product deleted Successfully",
     });
 });
+export const getAllProducts = TryCatch(async (req, res, next) => {
+    const { search, price, category, sort } = req.query;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(process.env.PRODUCT_PER_PAGE || 8);
+    const skip = (page - 1) * limit;
+    const baseQuery = {};
+    if (search)
+        baseQuery.name = {
+            $regex: search,
+            $options: "i",
+        };
+    if (price)
+        baseQuery.price = {
+            $lte: Number(price),
+        };
+    if (category)
+        baseQuery.category = category;
+    const productsPromise = Product.find(baseQuery)
+        .sort(sort && { price: sort === "asc" ? 1 : -1 })
+        .limit(limit)
+        .skip(skip);
+    const [products, filteredOnlyProduct] = await Promise.all([
+        productsPromise,
+        Product.find(baseQuery),
+    ]);
+    // const filteredOnlyProduct = await Product.find(baseQuery);
+    // const products = await Product.find(baseQuery).sort(
+    //   sort && { price: sort ==="asc" ? 1 : -1}
+    // ).limit(limit).skip(skip);
+    const totalPage = Math.ceil(filteredOnlyProduct.length / limit);
+    return res.status(200).json({
+        success: true,
+        products,
+        totalPage
+    });
+});
